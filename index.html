@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stock Trading Web App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+      color: #333;
+    }
+
+    header {
+      background: #0a3d62;
+      color: white;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+
+    nav {
+      background: #1e3799;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1rem;
+    }
+
+    nav .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    nav .menu {
+      display: none;
+      flex-direction: column;
+    }
+
+    nav .menu a {
+      color: white;
+      padding: 0.5rem 0;
+      text-decoration: none;
+    }
+
+    nav .toggle {
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+
+    .content {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .content h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .content p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      background: #0a3d62;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #1e3799;
+    }
+
+    /* Swipe cards (just for demo feel) */
+    .cards-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .card {
+      min-width: 250px;
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+      nav .menu {
+        display: flex;
+        gap: 1.5rem;
+        flex-direction: row;
+      }
+
+      nav .toggle {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">StockTrader</div>
+    <div class="toggle" onclick="toggleMenu()">☰</div>
+    <div class="menu" id="nav-menu">
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <a href="#">Contact</a>
+    </div>
+  </nav>
+
+  <header>
+    <h1>Welcome to My Stock Trading Web App</h1>
+  </header>
+
+  <div class="content">
+    <p>This web app allows you to view real-time stock prices, analyze trends, and make informed trading decisions. It's optimized for both desktop and mobile, with a responsive layout and swipeable cards to easily navigate through different stocks or features.</p>
+    <button class="btn">See Live Stock Data</button>
+  </div>
+
+  <div class="cards-container" id="cards">
+    <div class="card">📈 Stock A: $123.45</div>
+    <div class="card">📉 Stock B: $98.76</div>
+    <div class="card">📊 Stock C: $110.10</div>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('nav-menu');
+      if (menu.style.display === 'flex') {
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'flex';
+      }
+    }
+
+    // Optional swipe detection for mobile card scrolling
+    let touchStartX = 0;
+    let container = document.getElementById('cards');
+
+    container.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    container.addEventListener('touchend', e => {
+      let touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 50) container.scrollBy({ left: 200, behavior: 'smooth' });
+      if (touchEndX > touchStartX + 50) container.scrollBy({ left: -200, behavior: 'smooth' });
+    });
+  </script>
+
+</body>
+</html>
