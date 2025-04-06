@@ -1,105 +1,127 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
+/* Reset */
+* {
   margin: 0;
   padding: 0;
-  background: #f2f2f2;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
   color: #333;
+  line-height: 1.6;
 }
 
-header {
-  background: #0a3d62;
-  color: white;
-  padding: 1.5rem 1rem;
-  text-align: center;
-}
-
-nav {
-  background: #1e3799;
-  color: white;
+/* Navbar */
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.8rem 1rem;
+  background-color: #0f172a;
+  color: #fff;
+  padding: 1rem 2rem;
 }
 
-nav .logo {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-nav .menu {
-  display: none;
-  flex-direction: column;
-}
-
-nav .menu a {
-  color: white;
-  padding: 0.5rem 0;
-  text-decoration: none;
-}
-
-nav .toggle {
-  cursor: pointer;
+.navbar .logo {
   font-size: 1.5rem;
+  font-weight: bold;
 }
 
-.content {
-  padding: 2rem;
+.navbar .nav-links a {
+  color: #fff;
+  margin-left: 1rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar .nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, #2563eb, #1d4ed8);
+  color: white;
+  padding: 60px 20px;
   text-align: center;
 }
 
-.content h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
 }
 
-.content p {
+.hero span {
+  color: #facc15;
+}
+
+.hero p {
   font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
+  max-width: 700px;
+  margin: 0 auto 25px;
 }
 
-.btn {
-  background: #0a3d62;
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
+.hero button {
+  background-color: #facc15;
+  color: #1e293b;
+  padding: 12px 24px;
   font-size: 1rem;
-  border-radius: 5px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  font-weight: bold;
 }
 
-.btn:hover {
-  background: #1e3799;
+.hero button:hover {
+  background-color: #eab308;
 }
 
-/* Swipe cards (just for demo feel) */
-.cards-container {
+/* Stocks Section */
+.stocks-section {
+  padding: 40px 20px;
+}
+
+.stock-container {
   display: flex;
-  overflow-x: auto;
-  gap: 1rem;
-  padding: 1rem;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
-.card {
-  min-width: 250px;
-  background: white;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  flex-shrink: 0;
+.stock-card {
+  width: 230px;
+  padding: 20px;
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: 0.3s ease;
+  cursor: pointer;
 }
 
-/* Responsive */
-@media (min-width: 768px) {
-  nav .menu {
-    display: flex;
-    gap: 1.5rem;
-    flex-direction: row;
-  }
+.stock-card:hover {
+  transform: translateY(-5px);
+}
 
-  nav .toggle {
-    display: none;
-  }
+.stock-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.stock-name {
+  font-size: 18px;
+}
+
+.stock-price {
+  font-size: 16px;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #0f172a;
+  color: white;
+  margin-top: 50px;
 }
