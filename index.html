@@ -2,40 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stock Trading Web App</title>
-  
-  <!-- ✅ Link external CSS -->
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StockTrader</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <nav>
+  <header class="navbar">
     <div class="logo">StockTrader</div>
-    <div class="toggle" onclick="toggleMenu()">☰</div>
-    <div class="menu" id="nav-menu">
+    <nav class="nav-links">
       <a href="#">Home</a>
       <a href="#">Features</a>
       <a href="#">Contact</a>
-    </div>
-  </nav>
-
-  <header>
-    <h1>Welcome to My Stock Trading Web App</h1>
+    </nav>
   </header>
 
-  <div class="content">
-    <p>This web app allows you to view real-time stock prices, analyze trends, and make informed trading decisions. It's optimized for both desktop and mobile, with a responsive layout and swipeable cards to easily navigate through different stocks or features.</p>
-    <button class="btn">See Live Stock Data</button>
-  </div>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Welcome to <span>StockTrader</span></h1>
+      <p>Real-time stock prices, insights, and smart investing in one modern platform. Track markets with confidence like a pro.</p>
+      <button onclick="loadStockData()">See Live Stock Data</button>
+    </div>
+  </section>
 
-  <div class="cards-container" id="cards">
-    <div class="card">📈 Stock A: $123.45</div>
-    <div class="card">📉 Stock B: $98.76</div>
-    <div class="card">📊 Stock C: $110.10</div>
-  </div>
+  <section class="stocks-section">
+    <div class="stock-container" id="stockContainer"></div>
+  </section>
 
-  <!-- ✅ Link external JS -->
+  <footer class="footer">
+    © 2025 StockTrader. All rights reserved.
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>
