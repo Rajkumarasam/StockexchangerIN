@@ -1,23 +1,31 @@
-const stocks = [
-  { name: "Stock A", price: 123.45, color: "linear-gradient(135deg, #3b82f6, #60a5fa)", icon: "📈" },
-  { name: "Stock B", price: 98.76, color: "linear-gradient(135deg, #ec4899, #f472b6)", icon: "📉" },
-  { name: "Stock C", price: 110.10, color: "linear-gradient(135deg, #10b981, #34d399)", icon: "📊" },
-  { name: "Stock D", price: 150.67, color: "linear-gradient(135deg, #f59e0b, #fbbf24)", icon: "💰" },
-  { name: "Stock E", price: 89.34, color: "linear-gradient(135deg, #8b5cf6, #a78bfa)", icon: "🪙" }
-];
+document.addEventListener("DOMContentLoaded", () => {
+  const updates = [
+    {
+      symbol: "RELIANCE",
+      price: "₹2,300",
+      change: "+0.75%",
+      time: "2025-04-07 10:30 AM"
+    },
+    {
+      symbol: "TCS",
+      price: "₹3,150",
+      change: "-0.20%",
+      time: "2025-04-07 10:32 AM"
+    }
+  ];
 
-function loadStockData() {
-  const container = document.getElementById("stockContainer");
-  container.innerHTML = ""; // clear existing
-  stocks.forEach(stock => {
-    const card = document.createElement("div");
-    card.className = "stock-card";
-    card.style.background = stock.color;
-    card.innerHTML = `
-      <div class="stock-icon">${stock.icon}</div>
-      <div class="stock-name">${stock.name}</div>
-      <div class="stock-price">$${stock.price.toFixed(2)}</div>
+  const container = document.getElementById("updates-container");
+  container.innerHTML = "";
+
+  updates.forEach(update => {
+    const item = document.createElement("div");
+    item.className = "update-item";
+    item.innerHTML = `
+      <strong>${update.symbol}</strong><br>
+      Price: ${update.price} <br>
+      Change: ${update.change} <br>
+      Time: ${update.time}
     `;
-    container.appendChild(card);
+    container.appendChild(item);
   });
-}
+});
