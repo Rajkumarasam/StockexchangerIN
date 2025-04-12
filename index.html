@@ -1,28 +1,1535 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>StockexchangerIN</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradePulse - AI-Powered Algorithmic Trading Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #0a192f;
+            --primary-teal: #00bfa6;
+            --primary-light: #f8f9fa;
+            --secondary-blue: #1e3a8a;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            background-color: var(--primary-light);
+        }
+        
+        .bg-dark-blue {
+            background-color: var(--primary-dark);
+        }
+        
+        .bg-teal {
+            background-color: var(--primary-teal);
+        }
+        
+        .text-teal {
+            color: var(--primary-teal);
+        }
+        
+        .text-dark-blue {
+            color: var(--primary-dark);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-teal);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #00a090;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 191, 166, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-teal);
+            border: 2px solid var(--primary-teal);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary-teal);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 191, 166, 0.2);
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .indicator-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .indicator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .price-card {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .price-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .price-card.highlighted {
+            border: 2px solid var(--primary-teal);
+            transform: scale(1.05);
+        }
+        
+        .price-card.highlighted:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-teal);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .dashboard-container {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: none;
+            }
+            
+            .mobile-menu.active {
+                display: flex;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>StockexchangerIN</h1>
-    <p>Your trusted source for stock updates</p>
-  </header>
-
-  <main>
-    <section id="updates-section">
-      <h2>Latest Stock Updates</h2>
-      <div id="updates-container">Loading updates...</div>
+    <!-- Navigation -->
+    <nav class="bg-dark-blue text-white py-4 sticky top-0 z-50">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <div class="flex items-center">
+                <span class="text-2xl font-bold text-white">Trade<span class="text-teal">Pulse</span></span>
+            </div>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#features" class="nav-link text-gray-300 hover:text-white">Features</a>
+                <a href="#indicators" class="nav-link text-gray-300 hover:text-white">Indicators</a>
+                <a href="#dashboard" class="nav-link text-gray-300 hover:text-white">Dashboard</a>
+                <a href="#pricing" class="nav-link text-gray-300 hover:text-white">Pricing</a>
+            </div>
+            
+            <div class="hidden md:block">
+                <button class="btn-primary py-2 px-6 rounded-full">Get Started</button>
+            </div>
+            
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-white focus:outline-none">
+                    <i class="ri-menu-line text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="mobile-menu md:hidden bg-dark-blue flex flex-col items-center py-4">
+            <a href="#features" class="block py-2 text-gray-300 hover:text-white">Features</a>
+            <a href="#indicators" class="block py-2 text-gray-300 hover:text-white">Indicators</a>
+            <a href="#dashboard" class="block py-2 text-gray-300 hover:text-white">Dashboard</a>
+            <a href="#pricing" class="block py-2 text-gray-300 hover:text-white">Pricing</a>
+            <button class="btn-primary py-2 px-6 rounded-full mt-4">Get Started</button>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="bg-dark-blue text-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                        Revolutionize Your Trading with <span class="text-teal">AI-Powered</span> Market Predictions
+                    </h1>
+                    <p class="text-gray-300 text-lg mb-8">
+                        TradePulse brings cutting-edge algorithmic trading capabilities to your fingertips. Leverage our advanced AI models and technical indicators to generate precise trading signals for the Indian stock market.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button class="btn-primary py-3 px-8 rounded-full font-semibold">
+                            Start Free Trial
+                        </button>
+                        <button class="btn-secondary py-3 px-8 rounded-full font-semibold">
+                            Watch Demo
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <div class="dashboard-container bg-white p-4 rounded-lg shadow-lg">
+                        <div class="bg-gray-100 rounded-lg overflow-hidden">
+                            <div class="p-2 bg-dark-blue text-white text-sm flex justify-between items-center">
+                                <span>NIFTY 50</span>
+                                <div class="flex items-center">
+                                    <span class="text-green-400 mr-2">+1.2%</span>
+                                    <span>22,457</span>
+                                </div>
+                            </div>
+                            <canvas id="heroChart" class="p-2"></canvas>
+                        </div>
+                        <div class="mt-4 grid grid-cols-2 gap-2">
+                            <div class="bg-green-100 p-2 rounded-lg">
+                                <span class="text-xs text-gray-600">Buy Signal</span>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-green-600">HDFC Bank</span>
+                                    <span class="text-green-600">+2.5%</span>
+                                </div>
+                            </div>
+                            <div class="bg-red-100 p-2 rounded-lg">
+                                <span class="text-xs text-gray-600">Sell Signal</span>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-red-600">Infosys</span>
+                                    <span class="text-red-600">-1.2%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 StockexchangerIN</p>
-  </footer>
-
-  <script src="script.js"></script>
+    
+    <!-- Stats Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-6">
+                    <h3 class="text-4xl font-bold text-dark-blue mb-2">95%</h3>
+                    <p class="text-gray-600">Signal Accuracy</p>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-4xl font-bold text-dark-blue mb-2">10K+</h3>
+                    <p class="text-gray-600">Active Users</p>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-4xl font-bold text-dark-blue mb-2">₹500Cr+</h3>
+                    <p class="text-gray-600">Trade Volume</p>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-4xl font-bold text-dark-blue mb-2">24/7</h3>
+                    <p class="text-gray-600">Expert Support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark-blue mb-4">Powerful Features for Smart Trading</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    TradePulse combines sophisticated algorithms, real-time data, and user-friendly interfaces to provide you with a comprehensive trading solution.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="feature-card bg-white p-6">
+                    <div class="text-teal text-4xl mb-4">
+                        <i class="ri-brain-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-blue mb-2">AI-Powered Predictions</h3>
+                    <p class="text-gray-600">
+                        Our advanced machine learning algorithms analyze patterns and predict market movements with remarkable accuracy.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-white p-6">
+                    <div class="text-teal text-4xl mb-4">
+                        <i class="ri-line-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-blue mb-2">Multiple Technical Indicators</h3>
+                    <p class="text-gray-600">
+                        Access over 50+ technical indicators to build comprehensive trading strategies tailored to your preferences.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-white p-6">
+                    <div class="text-teal text-4xl mb-4">
+                        <i class="ri-time-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-blue mb-2">Advanced Backtesting</h3>
+                    <p class="text-gray-600">
+                        Test your strategies against historical data to validate their effectiveness before risking real capital.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-white p-6">
+                    <div class="text-teal text-4xl mb-4">
+                        <i class="ri-notification-3-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-blue mb-2">Real-Time Alerts</h3>
+                    <p class="text-gray-600">
+                        Receive instant notifications for trade signals, price movements, and market events that matter to you.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-white p-6">
+                    <div class="text-teal text-4xl mb-4">
+                        <i class="ri-dashboard-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-blue mb-2">Customizable Dashboard</h3>
+                    <p class="text-gray-600">
+                        Personalize your trading experience with a flexible dashboard that displays the information you need.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-white p-6">
+                    <div class="text-teal text-4xl mb-4">
+                        <i class="ri-exchange-funds-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-blue mb-2">Direct Broker Integration</h3>
+                    <p class="text-gray-600">
+                        Seamlessly connect with major Indian brokers for automated order execution and portfolio tracking.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-white p-6">
+                    <div class="text-teal text-4xl mb-4">
+                        <i class="ri-file-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-blue mb-2">Comprehensive Reports</h3>
+                    <p class="text-gray-600">
+                        Generate detailed performance reports to analyze your trading history and improve your strategies.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-white p-6">
+                    <div class="text-teal text-4xl mb-4">
+                        <i class="ri-shield-check-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-blue mb-2">Risk Management Tools</h3>
+                    <p class="text-gray-600">
+                        Implement sophisticated risk controls to protect your capital and optimize your trading performance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Indicators Section -->
+    <section id="indicators" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark-blue mb-4">Technical Indicators for Algorithmic Success</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Our platform harnesses the power of advanced technical indicators to help you make informed trading decisions based on market data and patterns.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="indicator-card bg-white overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-dark-blue mb-4">Moving Averages</h3>
+                        <p class="text-gray-600 mb-4">
+                            Identify trends by smoothing out price data over specific time periods, with support for SMA, EMA, WMA, and VWMA.
+                        </p>
+                        <div class="chart-container">
+                            <canvas id="maChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="indicator-card bg-white overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-dark-blue mb-4">Relative Strength Index (RSI)</h3>
+                        <p class="text-gray-600 mb-4">
+                            Measure momentum and identify overbought or oversold conditions with this powerful oscillator.
+                        </p>
+                        <div class="chart-container">
+                            <canvas id="rsiChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="indicator-card bg-white overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-dark-blue mb-4">MACD</h3>
+                        <p class="text-gray-600 mb-4">
+                            Use Moving Average Convergence Divergence to spot changes in strength, direction, momentum, and duration of trends.
+                        </p>
+                        <div class="chart-container">
+                            <canvas id="macdChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="indicator-card bg-white overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-dark-blue mb-4">Bollinger Bands</h3>
+                        <p class="text-gray-600 mb-4">
+                            Visualize volatility and potential price breakouts with dynamic bands that expand and contract with market conditions.
+                        </p>
+                        <div class="chart-container">
+                            <canvas id="bbChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="indicator-card bg-white overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-dark-blue mb-4">Stochastic Oscillator</h3>
+                        <p class="text-gray-600 mb-4">
+                            Compare closing price to price range over time to generate momentum-based signals for potential trend reversals.
+                        </p>
+                        <div class="chart-container">
+                            <canvas id="stochChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="indicator-card bg-white overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-dark-blue mb-4">Fibonacci Retracement</h3>
+                        <p class="text-gray-600 mb-4">
+                            Identify potential support and resistance levels based on the golden ratio for precise entry and exit points.
+                        </p>
+                        <div class="chart-container">
+                            <canvas id="fiboChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="btn-primary py-3 px-8 rounded-full font-semibold">
+                    Explore All Indicators
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Dashboard Preview -->
+    <section id="dashboard" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark-blue mb-4">Powerful Trading Dashboard</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Experience our intuitive dashboard that provides comprehensive market insights and trading signals at a glance.
+                </p>
+            </div>
+            
+            <div class="bg-white rounded-lg overflow-hidden shadow-xl">
+                <div class="bg-dark-blue text-white p-4">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold">TradePulse Dashboard</span>
+                            <span class="bg-teal text-white text-xs px-2 py-1 rounded">LIVE</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span>April 12, 2025</span>
+                            <span>13:45:22</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2">
+                            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div>
+                                        <h3 class="font-bold text-dark-blue">NIFTY 50 Chart</h3>
+                                        <span class="text-green-600">22,457.80 +1.2%</span>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded text-sm">1D</button>
+                                        <button class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded text-sm">1W</button>
+                                        <button class="bg-teal text-white px-3 py-1 rounded text-sm">1M</button>
+                                        <button class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded text-sm">YTD</button>
+                                    </div>
+                                </div>
+                                <div class="chart-container h-64">
+                                    <canvas id="mainChart"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h3 class="font-bold text-dark-blue mb-2">Volume Analysis</h3>
+                                    <div class="chart-container h-40">
+                                        <canvas id="volumeChart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <h3 class="font-bold text-dark-blue mb-2">Momentum Indicators</h3>
+                                    <div class="chart-container h-40">
+                                        <canvas id="momentumChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h3 class="font-bold text-dark-blue mb-2">Recent Trading Signals</h3>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full">
+                                        <thead>
+                                            <tr class="bg-gray-100">
+                                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Stock</th>
+                                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Signal</th>
+                                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Price</th>
+                                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Time</th>
+                                                <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Accuracy</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-b border-gray-200">
+                                                <td class="px-4 py-2 text-sm">HDFC Bank</td>
+                                                <td class="px-4 py-2 text-sm"><span class="bg-green-100 text-green-600 px-2 py-1 rounded">BUY</span></td>
+                                                <td class="px-4 py-2 text-sm">₹1,578.25</td>
+                                                <td class="px-4 py-2 text-sm">13:15</td>
+                                                <td class="px-4 py-2 text-sm">95%</td>
+                                            </tr>
+                                            <tr class="border-b border-gray-200">
+                                                <td class="px-4 py-2 text-sm">Reliance</td>
+                                                <td class="px-4 py-2 text-sm"><span class="bg-green-100 text-green-600 px-2 py-1 rounded">BUY</span></td>
+                                                <td class="px-4 py-2 text-sm">₹2,890.10</td>
+                                                <td class="px-4 py-2 text-sm">12:45</td>
+                                                <td class="px-4 py-2 text-sm">92%</td>
+                                            </tr>
+                                            <tr class="border-b border-gray-200">
+                                                <td class="px-4 py-2 text-sm">Infosys</td>
+                                                <td class="px-4 py-2 text-sm"><span class="bg-red-100 text-red-600 px-2 py-1 rounded">SELL</span></td>
+                                                <td class="px-4 py-2 text-sm">₹1,420.50</td>
+                                                <td class="px-4 py-2 text-sm">11:30</td>
+                                                <td class="px-4 py-2 text-sm">91%</td>
+                                            </tr>
+                                            <tr class="border-b border-gray-200">
+                                                <td class="px-4 py-2 text-sm">TCS</td>
+                                                <td class="px-4 py-2 text-sm"><span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded">HOLD</span></td>
+                                                <td class="px-4 py-2 text-sm">₹3,580.15</td>
+                                                <td class="px-4 py-2 text-sm">10:20</td>
+                                                <td class="px-4 py-2 text-sm">88%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                                <h3 class="font-bold text-dark-blue mb-2">Market Overview</h3>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">NIFTY 50</span>
+                                        <span class="text-green-600 text-sm">+1.2%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">SENSEX</span>
+                                        <span class="text-green-600 text-sm">+0.9%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: 58%"></div>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">BANK NIFTY</span>
+                                        <span class="text-green-600 text-sm">+1.5%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: 72%"></div>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">MIDCAP</span>
+                                        <span class="text-red-600 text-sm">-0.3%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-red-600 h-2 rounded-full" style="width: 42%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                                <h3 class="font-bold text-dark-blue mb-2">Today's Predictions</h3>
+                                <div class="space-y-4">
+                                    <div class="bg-white p-3 rounded-lg shadow-sm">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-medium">HDFC Bank</span>
+                                            <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">BUY</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm text-gray-600 mt-1">
+                                            <span>Entry: ₹1,570</span>
+                                            <span>Target: ₹1,620</span>
+                                            <span>SL: ₹1,550</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-lg shadow-sm">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-medium">Reliance</span>
+                                            <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">BUY</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm text-gray-600 mt-1">
+                                            <span>Entry: ₹2,885</span>
+                                            <span>Target: ₹2,950</span>
+                                            <span>SL: ₹2,845</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white p-3 rounded-lg shadow-sm">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-medium">Infosys</span>
+                                            <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs">SELL</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm text-gray-600 mt-1">
+                                            <span>Entry: ₹1,425</span>
+                                            <span>Target: ₹1,380</span>
+                                            <span>SL: ₹1,445</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h3 class="font-bold text-dark-blue mb-2">Top Performers</h3>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">Adani Ports</span>
+                                        <span class="text-green-600 text-sm">+3.8%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">Tata Motors</span>
+                                        <span class="text-green-600 text-sm">+2.9%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">ICICI Bank</span>
+                                        <span class="text-green-600 text-sm">+2.7%</span>
+                                    </div>
+                                    <h3 class="font-bold text-dark-blue mt-4 mb-2">Underperformers</h3>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">HCL Tech</span>
+                                        <span class="text-red-600 text-sm">-1.8%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm">Bharti Airtel</span>
+                                        <span class="text-red-600 text-sm">-1.2%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark-blue mb-4">Choose Your Trading Plan</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Select the perfect plan for your trading needs, with flexible options designed for everyone from beginners to professional traders.
+                </p>
+            </div>
+            
+            <div class="flex flex-wrap justify-center">
+                <div class="w-full md:w-1/3 px-4 mb-8">
+                    <div class="price-card bg-white h-full rounded-lg overflow-hidden p-6">
+                        <div class="text-center mb-8">
+                            <h3 class="text-xl font-bold text-dark-blue mb-2">Starter</h3>
+                            <div class="text-4xl font-bold text-dark-blue mb-2">₹999<span class="text-gray-400 text-sm font-normal">/month</span></div>
+                            <p class="text-gray-600">Perfect for new traders</p>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>5 technical indicators</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Basic historical data</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Limited backtesting</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Email alerts</span>
+                            </div>
+                            <div class="flex items-center mb-4 text-gray-400">
+                                <i class="ri-close-line mr-2"></i>
+                                <span>AI-powered predictions</span>
+                            </div>
+                            <div class="flex items-center mb-4 text-gray-400">
+                                <i class="ri-close-line mr-2"></i>
+                                <span>Broker integration</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="btn-secondary py-2 px-8 rounded-full font-semibold w-full">
+                                Get Started
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/3 px-4 mb-8">
+                    <div class="price-card highlighted bg-white h-full rounded-lg overflow-hidden p-6 relative">
+                        <div class="absolute top-0 right-0 bg-teal text-white px-4 py-1 text-sm">
+                            POPULAR
+                        </div>
+                        
+                        <div class="text-center mb-8">
+                            <h3 class="text-xl font-bold text-dark-blue mb-2">Professional</h3>
+                            <div class="text-4xl font-bold text-dark-blue mb-2">₹2,499<span class="text-gray-400 text-sm font-normal">/month</span></div>
+                            <p class="text-gray-600">For active traders</p>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>All technical indicators</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Full historical data</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Advanced backtesting</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Email & SMS alerts</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>AI-powered predictions</span>
+                            </div>
+                            <div class="flex items-center mb-4 text-gray-400">
+                                <i class="ri-close-line mr-2"></i>
+                                <span>Broker integration</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="btn-primary py-2 px-8 rounded-full font-semibold w-full">
+                                Get Started
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/3 px-4 mb-8">
+                    <div class="price-card bg-white h-full rounded-lg overflow-hidden p-6">
+                        <div class="text-center mb-8">
+                            <h3 class="text-xl font-bold text-dark-blue mb-2">Enterprise</h3>
+                            <div class="text-4xl font-bold text-dark-blue mb-2">₹4,999<span class="text-gray-400 text-sm font-normal">/month</span></div>
+                            <p class="text-gray-600">For professional traders</p>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>All features from Professional</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Multiple broker integration</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Custom strategy development</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Dedicated account manager</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Priority customer support</span>
+                            </div>
+                            <div class="flex items-center mb-4">
+                                <i class="ri-check-line text-teal mr-2"></i>
+                                <span>Advanced API access</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="btn-secondary py-2 px-8 rounded-full font-semibold w-full">
+                                Get Started
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <p class="text-gray-600 mb-4">Not sure which plan is right for you?</p>
+                <button class="bg-dark-blue text-white py-3 px-8 rounded-full font-semibold hover:bg-opacity-90 transition">
+                    Try Free for 14 Days
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark-blue mb-4">What Our Traders Say</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Hear from our community of traders who have transformed their trading experience with TradePulse.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-teal">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">
+                        "TradePulse has completely changed my trading approach. The AI predictions are remarkably accurate, and the interface is intuitive. I've seen a 27% increase in my portfolio since I started using it."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                        <div>
+                            <h4 class="font-bold text-dark-blue">Rajesh Sharma</h4>
+                            <p class="text-gray-600 text-sm">Day Trader, Mumbai</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-teal">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">
+                        "As a professional trader, I needed a platform that could keep up with my demands. TradePulse not only meets but exceeds my expectations with its comprehensive set of tools and reliable signals."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                        <div>
+                            <h4 class="font-bold text-dark-blue">Priya Patel</h4>
+                            <p class="text-gray-600 text-sm">Investment Advisor, Delhi</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="text-teal">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-half-fill"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">
+                        "I was skeptical about algorithmic trading at first, but TradePulse made it accessible and profitable. Their backtesting feature helped me refine my strategies without risking real capital."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
+                        <div>
+                            <h4 class="font-bold text-dark-blue">Vikram Singh</h4>
+                            <p class="text-gray-600 text-sm">Retail Investor, Bangalore</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="py-20 bg-dark-blue text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Trading?</h2>
+            <p class="text-gray-300 max-w-2xl mx-auto mb-8">
+                Join thousands of successful traders who have elevated their trading performance with TradePulse's cutting-edge algorithmic trading platform.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button class="btn-primary py-3 px-8 rounded-full font-semibold">
+                    Start Free Trial
+                </button>
+                <button class="btn-secondary py-3 px-8 rounded-full font-semibold">
+                    Schedule Demo
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="text-2xl font-bold mb-6">Trade<span class="text-teal">Pulse</span></div>
+                    <p class="text-gray-400 mb-4">
+                        Advanced algorithmic trading platform built for the Indian stock market, providing AI-powered predictions and technical analysis tools.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-teal transition">
+                            <i class="ri-facebook-fill text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-teal transition">
+                            <i class="ri-twitter-fill text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-teal transition">
+                            <i class="ri-linkedin-fill text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-teal transition">
+                            <i class="ri-instagram-fill text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-gray-400 hover:text-teal transition">Features</a></li>
+                        <li><a href="#indicators" class="text-gray-400 hover:text-teal transition">Indicators</a></li>
+                        <li><a href="#dashboard" class="text-gray-400 hover:text-teal transition">Dashboard</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-teal transition">Pricing</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-teal transition">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-teal transition">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-teal transition">Documentation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-teal transition">API Reference</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-teal transition">Market News</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-teal transition">Learning Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="ri-map-pin-line mt-1 mr-2 text-teal"></i>
+                            <span class="text-gray-400">Trade Tower, Bandra Kurla Complex, Mumbai, India</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-mail-line mr-2 text-teal"></i>
+                            <a href="mailto:support@tradepulse.com" class="text-gray-400 hover:text-teal transition">support@tradepulse.com</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-phone-line mr-2 text-teal"></i>
+                            <a href="tel:+918800123456" class="text-gray-400 hover:text-teal transition">+91 88001 23456</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2025 TradePulse. All rights reserved.
+                </p>
+                
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-teal text-sm transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-teal text-sm transition">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-teal text-sm transition">Disclaimer</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        });
+        
+        // Chart.js Configuration - Hero Chart
+        const heroChartCtx = document.getElementById('heroChart').getContext('2d');
+        const heroChart = new Chart(heroChartCtx, {
+            type: 'line',
+            data: {
+                labels: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                datasets: [{
+                    label: 'NIFTY 50',
+                    data: [22150, 22200, 22250, 22300, 22280, 22310, 22350, 22330, 22380, 22400, 22420, 22410, 22440, 22450, 22457],
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'rgba(0, 191, 166, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 4
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        display: false
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // Technical Indicators Charts
+        
+        // Moving Averages Chart
+        const maChartCtx = document.getElementById('maChart').getContext('2d');
+        const maChart = new Chart(maChartCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 20}, (_, i) => i + 1),
+                datasets: [{
+                    label: 'Price',
+                    data: [100, 102, 103, 99, 98, 101, 103, 105, 106, 108, 109, 110, 112, 111, 113, 115, 118, 120, 119, 122],
+                    borderColor: '#0a192f',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }, {
+                    label: 'SMA (5)',
+                    data: [null, null, null, null, 100.4, 100.6, 100.8, 101.2, 102.6, 104.2, 106.0, 107.6, 109.0, 110.2, 111.4, 112.4, 113.8, 115.4, 117.0, 118.8],
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }, {
+                    label: 'SMA (10)',
+                    data: [null, null, null, null, null, null, null, null, null, 102.5, 103.5, 104.3, 105.2, 106.0, 107.0, 108.3, 109.4, 110.7, 112.0, 113.5],
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // RSI Chart
+        const rsiChartCtx = document.getElementById('rsiChart').getContext('2d');
+        const rsiChart = new Chart(rsiChartCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 20}, (_, i) => i + 1),
+                datasets: [{
+                    label: 'RSI',
+                    data: [50, 55, 62, 54, 48, 52, 58, 63, 68, 72, 76, 80, 85, 78, 82, 87, 84, 88, 82, 78],
+                    borderColor: '#0a192f',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }, {
+                    label: 'Overbought (70)',
+                    data: Array(20).fill(70),
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }, {
+                    label: 'Oversold (30)',
+                    data: Array(20).fill(30),
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        min: 0,
+                        max: 100
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // MACD Chart
+        const macdChartCtx = document.getElementById('macdChart').getContext('2d');
+        const macdChart = new Chart(macdChartCtx, {
+            type: 'bar',
+            data: {
+                labels: Array.from({length: 20}, (_, i) => i + 1),
+                datasets: [{
+                    label: 'MACD Histogram',
+                    data: [-0.5, -0.3, 0.2, 0.4, 0.5, 0.6, 0.8, 0.9, 0.7, 0.5, 0.3, 0.1, -0.2, -0.4, -0.5, -0.3, -0.1, 0.1, 0.3, 0.5],
+                    backgroundColor: function(context) {
+                        const value = context.dataset.data[context.dataIndex];
+                        return value < 0 ? '#ff6b6b' : '#00bfa6';
+                    },
+                    borderWidth: 0
+                }, {
+                    label: 'MACD Line',
+                    data: [0.5, 0.7, 1.0, 1.2, 1.3, 1.4, 1.6, 1.7, 1.5, 1.3, 1.1, 0.9, 0.6, 0.4, 0.3, 0.5, 0.7, 0.9, 1.1, 1.3],
+                    borderColor: '#0a192f',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    type: 'line',
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }, {
+                    label: 'Signal Line',
+                    data: [1.0, 1.0, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8],
+                    borderColor: '#ff9a3c',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    type: 'line',
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // Bollinger Bands Chart
+        const bbChartCtx = document.getElementById('bbChart').getContext('2d');
+        const bbChart = new Chart(bbChartCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 20}, (_, i) => i + 1),
+                datasets: [{
+                    label: 'Price',
+                    data: [100, 102, 103, 99, 98, 101, 103, 105, 106, 108, 109, 110, 112, 111, 113, 115, 118, 120, 119, 122],
+                    borderColor: '#0a192f',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }, {
+                    label: 'Upper Band',
+                    data: [105, 107, 108, 104, 103, 106, 108, 110, 111, 113, 114, 115, 117, 116, 118, 120, 123, 125, 124, 127],
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }, {
+                    label: 'Middle Band (SMA)',
+                    data: [100, 100, 100.5, 100.5, 100.5, 101, 101.5, 102, 102.5, 103, 103.5, 104, 104.5, 105, 105.5, 106, 107, 108, 109, 110],
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    pointRadius: 0
+                }, {
+                    label: 'Lower Band',
+                    data: [95, 93, 93, 97, 98, 96, 95, 94, 94, 93, 93, 93, 92, 94, 93, 92, 91, 91, 94, 93],
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // Stochastic Oscillator Chart
+        const stochChartCtx = document.getElementById('stochChart').getContext('2d');
+        const stochChart = new Chart(stochChartCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 20}, (_, i) => i + 1),
+                datasets: [{
+                    label: '%K',
+                    data: [50, 55, 62, 54, 48, 52, 58, 63, 68, 72, 76, 80, 85, 78, 82, 87, 84, 88, 82, 78],
+                    borderColor: '#0a192f',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }, {
+                    label: '%D',
+                    data: [52, 54, 57, 57, 54, 51, 53, 58, 63, 68, 72, 76, 80, 81, 82, 82, 84, 86, 85, 83],
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }, {
+                    label: 'Overbought (80)',
+                    data: Array(20).fill(80),
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }, {
+                    label: 'Oversold (20)',
+                    data: Array(20).fill(20),
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        min: 0,
+                        max: 100
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // Fibonacci Retracement Chart
+        const fiboChartCtx = document.getElementById('fiboChart').getContext('2d');
+        const fiboChart = new Chart(fiboChartCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 20}, (_, i) => i + 1),
+                datasets: [{
+                    label: 'Price',
+                    data: [100, 102, 105, 108, 112, 118, 125, 128, 130, 128, 124, 120, 118, 116, 114, 112, 110, 108, 106, 104],
+                    borderColor: '#0a192f',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }, {
+                    label: '0% (130)',
+                    data: Array(20).fill(130),
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }, {
+                    label: '23.6% (123)',
+                    data: Array(20).fill(123),
+                    borderColor: '#ffbb00',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }, {
+                    label: '38.2% (118.5)',
+                    data: Array(20).fill(118.5),
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }, {
+                    label: '50% (115)',
+                    data: Array(20).fill(115),
+                    borderColor: '#3f51b5',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }, {
+                    label: '61.8% (111.5)',
+                    data: Array(20).fill(111.5),
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // Main Chart
+        const mainChartCtx = document.getElementById('mainChart').getContext('2d');
+        const mainChart = new Chart(mainChartCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 30}, (_, i) => `${i+1}`),
+                datasets: [{
+                    label: 'NIFTY 50',
+                    data: [
+                        21500, 21550, 21600, 21650, 21680, 21700, 21750, 21775, 21800, 21825,
+                        21850, 21880, 21900, 21925, 21950, 21980, 22000, 22025, 22050, 22080,
+                        22100, 22150, 22175, 22200, 22250, 22300, 22350, 22400, 22425, 22457
+                    ],
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'rgba(0, 191, 166, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 4
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // Volume Chart
+        const volumeChartCtx = document.getElementById('volumeChart').getContext('2d');
+        const volumeChart = new Chart(volumeChartCtx, {
+            type: 'bar',
+            data: {
+                labels: Array.from({length: 20}, (_, i) => `${i+1}`),
+                datasets: [{
+                    label: 'Volume',
+                    data: [
+                        250000, 280000, 320000, 270000, 290000, 310000, 350000, 380000, 
+                        420000, 380000, 350000, 320000, 370000, 400000, 450000, 480000, 
+                        420000, 390000, 370000, 410000
+                    ],
+                    backgroundColor: function(context) {
+                        const index = context.dataIndex;
+                        return index % 2 === 0 ? 'rgba(0, 191, 166, 0.6)' : 'rgba(10, 25, 47, 0.6)';
+                    },
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // Momentum Chart
+        const momentumChartCtx = document.getElementById('momentumChart').getContext('2d');
+        const momentumChart = new Chart(momentumChartCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 20}, (_, i) => `${i+1}`),
+                datasets: [{
+                    label: 'RSI',
+                    data: [50, 55, 62, 54, 48, 52, 58, 63, 68, 72, 76, 80, 85, 78, 82, 87, 84, 88, 82, 78],
+                    borderColor: '#0a192f',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3,
+                    yAxisID: 'y'
+                }, {
+                    label: 'MACD',
+                    data: [-0.5, -0.3, 0.2, 0.4, 0.5, 0.6, 0.8, 0.9, 0.7, 0.5, 0.3, 0.1, -0.2, -0.4, -0.5, -0.3, -0.1, 0.1, 0.3, 0.5],
+                    borderColor: '#00bfa6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 3,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        position: 'left',
+                        min: 0,
+                        max: 100
+                    },
+                    y1: {
+                        position: 'right',
+                        min: -2,
+                        max: 2,
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
 </body>
 </html>
